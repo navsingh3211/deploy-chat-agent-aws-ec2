@@ -1,0 +1,21 @@
+
+{
+  "$schema": "https://langgra.ph/schema.json",
+  "dependencies": ["."],
+  "graphs": {
+    "personal_chat_agent": "./agents/agent.py:chat_agent"
+  },
+  "env": ".env",
+  "http": {
+    "cors": {
+      "allow_origins": [
+        "https://smith.langchain.com",
+        "http://localhost:2024",
+        "http://127.0.0.1:2024"
+      ],
+      "allow_methods": ["*"],
+      "allow_headers": ["*"],
+      "allow_credentials": true
+    }
+  }
+}

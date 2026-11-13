@@ -1,0 +1,154 @@
+# WSL Setup on Windows
+Install WSL 2 in Windows 11 for Python Coding with VS Code
+- https://www.youtube.com/watch?v=MwxZ2hswZ6A
+
+# Environment Setup - Linux
+
+Complete setup for Langchain Agent Server on Ubuntu/Linux.
+
+## Prerequisites
+
+- Ubuntu 20.04+ or compatible Linux distribution
+- 8GB RAM minimum
+- 100GB free disk space
+- Internet connection
+
+## 1. Update System
+
+```bash
+sudo apt update && sudo apt upgrade -y
+cd ~
+```
+
+## 2. Install uv (Python Package Manager)
+
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+source ~/.bashrc
+
+# or 
+
+source $HOME/.local/bin/env
+```
+
+Verify installation:
+```bash
+uv --version
+```
+
+## 3. Install LangGraph CLI
+
+```bash
+pip install -U langgraph-cli
+# Optional: with in-memory server support
+pip install -U "langgraph-cli[inmem]"
+```
+
+Verify:
+```bash
+langgraph --help
+```
+
+## 4. Install Node.js via nvm
+
+Install nvm:
+```bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+source ~/.bashrc
+```
+
+Install Node.js 24 LTS (latest):
+```bash
+nvm install 24
+nvm use 24
+
+
+npm install -g pnpm
+pnpm -v
+# if above is not working then follow below one
+
+corepack enable
+corepack prepare pnpm@latest --activate
+pnpm -v
+```
+
+Install Yarn:
+```bash
+npm install -g yarn
+# Or use Corepack (built into Node.js 16.9+)
+corepack enable
+corepack prepare yarn@stable --activate
+```
+
+Verify:
+```bash
+node --version
+npm --version
+yarn --version
+```
+
+## 5. Configure API Keys
+
+Create `.env` file in your project root:
+
+```bash
+# LangSmith (recommended for tracing)
+LANGSMITH_API_KEY="lsv2_your-key-here"
+LANGSMITH_TRACING=true
+LANGSMITH_ENDPOINT="https://api.smith.langchain.com"
+LANGCHAIN_PROJECT="multi-agent-research"
+
+# Optional API keys
+GOOGLE_API_KEY="your-google-key-here"
+OLLAMA_API_KEY="your-ollama-key-here"
+WEATHER_API_KEY="your-weather-key-here"
+OPENAI_API_KEY="your-opneai-keys"
+```
+
+Get API keys from:
+- LangSmith: https://smith.langchain.com/
+- Google: https://makersuite.google.com/app/apikey
+
+## 6. Clone and Setup Backend
+
+```bash
+git clone https://github.com/laxmimerit/langchain-agent-chat-ui-template.git
+cd langchain-agent-chat-ui-template
+uv sync --upgrade
+uv add -U "langgraph-cli[inmem]"
+uv add -U langgraph-api
+```
+
+Start LangGraph server:
+```bash
+langgraph dev --host 0.0.0.0 --allow-blocking
+# or
+uv run langgraph dev --host 0.0.0.0 --allow-blocking
+```
+
+Server runs on http://localhost:2024
+https://smith.langchain.com/studio/?baseUrl=http://127.0.0.1:2024
+
+**Langchain Chat UI Link:**
+https://github.com/langchain-ai/agent-chat-ui
+
+
+### Deploy on AWS
+Gen AI Environment Setup (Windows): 
+- https://www.youtube.com/playlist?list=PLc2rvfiptPSQdX4jeLgW4nf5PId4j1msI
+
+Gen AI Environment Setup (MacOS/Linux):
+- https://www.youtube.com/playlist?list=PLc2rvfiptPSQVDu8nzUHb7FEkNCdU-E0o
+
+$200 AWS Free Credit Setup:
+- https://www.youtube.com/playlist?list=PLc2rvfiptPSRHHDk76XvdfQ3ilX5EnfoV
+
+
+
+### Note
+### SSH
+- ssh -i "~/.ssh/ai-agent-projects.pem" ubuntu@ec2-3-91-185-191.compute-1.amazonaws.com#
+
+run aws ec2 in pc:
+ chmod 400 ~/Downloads/ai-agent-deployment.pem
+ssh -i ~/Downloads/ai-agent-deployment.pem ubuntu@3.106.53.167
